@@ -21,6 +21,11 @@ For the function using a list of state names, you can change the states in the l
 For the function comparing two states, it takes two inputs that are separated by a comma and finds which one had the highest number of daily new cases. It then finds how many days passed between the peaks of the two states. This can be used to look for trends between diseases in different places, as shown in the code example, but it could also be reversed to look for the lowest amount for something of your choosing. This could be used to analyze geographical trends, policy effectiveness, and more.
 
 Exercise 4:
-This code needs the desc2022.xml file to run. It may not run if you try to rerun it on Colab as Colab automatically erases uploaded files. You have to add the file to the notebook for it to run.
-The DescriptorName associated with DescriptorUI D007154 is "Immune Ststem Diseases."
+This code needs the desc2022.xml file to run. It may not run if you try to rerun it on Colab as Colab automatically erases uploaded files. You have to add the file to the notebook for it to run. I did not realize that there were two sets of code: functions and single set code. I just wrote them all as functions from the beginning.
 
+The DescriptorName associated with DescriptorUI D007154 is "Immune System Diseases."
+The DescriptorUI associated with DescriptorName "Nervous System Diseases" is "D009422." 
+The descendants of both "Nervous System Diseases" and D007154 are:
+
+
+The above search finds diseases that are associated with both Immune System Diseases and Nervous System Diseases.
