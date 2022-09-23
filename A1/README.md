@@ -25,7 +25,4 @@ This code needs the desc2022.xml file to run. It may not run if you try to rerun
 
 The DescriptorName associated with DescriptorUI D007154 is "Immune System Diseases."
 The DescriptorUI associated with DescriptorName "Nervous System Diseases" is "D009422." 
-The descendants of both "Nervous System Diseases" and D007154 are:
-
-
-The above search finds diseases that are associated with both Immune System Diseases and Nervous System Diseases.
+The descendants of both "Nervous System Diseases" and D007154 are: Calcimycin. This search finds diseases that are associated with both Immune System Diseases and Nervous System Diseases.
