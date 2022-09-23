@@ -1,6 +1,8 @@
 Goldie Zhu
 Assignment 1 README
 
+This assignment was written on Colab
+
 Exercise 1:
 To test more cases, add them with the human and chicken testers. This works with any testers so you can add more testers (e.g. dog_tester) and it will work.
 
@@ -14,8 +16,10 @@ The general relationship between age and weight was consistently increasing. Thi
 Exercise 3:
 The historical data for COVID-19 cases by state was downloaded from the New York Time's Github on September 21, 2022.
 
-For the function using a list of state names, you can change the states in the list by changing the state_names[] function. There aren't any specific limitations other than having to change the states in the code itself instead of taking an input. Examples of plots in use is any kind of comparison plot; this could be comparing organizations, companies, states, countries, and other separate entities. This could be used to study the allocation of resources, trending behaviors, effective policies, and other necessary comparisons.
+For the function using a list of state names, you can change the states in the list by changing the state_names[] function. There aren't any specific limitations other than the amount of data, which could overcrowd the graph, and having to change the states in the code itself instead of taking an input. Only valid state names with the proper spelling and upper case letters are accepted. Examples of plots in use is any kind of comparison plot; this could be comparing organizations, companies, states, countries, and other separate entities. This could be used to study the allocation of resources, trending behaviors, effective policies, and other necessary comparisons.
 
 For the function comparing two states, it takes two inputs that are separated by a comma and finds which one had the highest number of daily new cases. It then finds how many days passed between the peaks of the two states. This can be used to look for trends between diseases in different places, as shown in the code example, but it could also be reversed to look for the lowest amount for something of your choosing. This could be used to analyze geographical trends, policy effectiveness, and more.
 
 Exercise 4:
+The DescriptorName associated with DescriptorUI D007154 is "Immune Ststem Diseases."
+
