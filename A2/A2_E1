@@ -1,0 +1,100 @@
+from time import perf_counter
+import numpy as np
+import matplotlib.pyplot as plt
+from multiprocessing import Process, Pool, Manager
+
+log_n = list(np.logspace(0, 7, dtype = int))
+
+def data1(n, sigma=10, rho=28, beta=8/3, dt=0.01, x=1, y=1, z=1):
+    import numpy
+    state = numpy.array([x, y, z], dtype=float)
+    result = []
+    for _ in range(n):
+        x, y, z = state
+        state += dt * numpy.array([
+            sigma * (y - x),
+            x * (rho - z) - y,
+            x * y - beta * z
+        ])
+        result.append(float(state[0] + 30))
+    return result
+
+def alg2(data):
+    if len(data) <= 1:
+        return data
+    else:
+        split = len(data) // 2
+        left = iter(alg2(data[:split])) # left sorted half
+        right = iter(alg2(data[split:])) # right sorted half
+        result = []
+        # note: this takes the top items off the left and right piles
+        left_top = next(left)
+        right_top = next(right)
+        while True:
+            if left_top < right_top:
+                result.append(left_top)
+            try:
+                left_top = next(left)
+            except StopIteration:
+                # nothing remains on the left; add the right + return
+                return result + [right_top] + list(right)
+            else:
+                result.append(right_top)
+            try:
+                right_top = next(right)
+            except StopIteration:
+                # nothing remains on the right; add the left + return
+                return result + [left_top] + list(left)
+
+def merge(left_h, right_h):
+    if len(right_h) <= 1:
+        return right_h
+    else:
+        left = iter(left_h)
+        right = iter(right_h)
+        result = []
+        # note: this takes the top items off the left and right piles
+        left_top = next(left)
+        right_top = next(right)
+        while True:
+            if left_top < right_top:
+                result.append(left_top)
+                try:
+                    left_top = next(left)
+                except StopIteration:
+                # nothing remains on the left; add the right + return
+                    return result + [right_top] + list(right)
+            else:
+                result.append(right_top)
+                try:
+                    right_top = next(right)
+                except StopIteration:
+                # nothing remains on the right; add the left + return
+                    return result + [left_top] + list(left)
+
+def main():
+    total_time = []
+    with Pool(2) as workers:
+        for n in log_n:
+            data1_list = data1(n)
+            start_time = perf_counter()
+            
+            split = len(data1_list) // 2
+            left_half = data1_list[:split]
+            right_half = data1_list[split:]
+            left_sorted, right_sorted = workers.map(alg2, [left_half, right_half])
+            
+            merge(left_sorted, right_sorted)
+
+            stop_time = perf_counter()
+            total_time.append(stop_time - start_time)
+
+    plt.loglog(log_n, total_time, label = 'alg2 data1')
+    plt.xlabel('Length')
+    plt.ylabel('time')
+    plt.show()
+
+    plt.legend(loc=0)
+
+if __name__ == '__main__':
+    main()
