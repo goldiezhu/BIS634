@@ -105,7 +105,9 @@ This plot has all algs and data sets.
 The following three plots compare the performace of alg1 and alg2 across the three datasets.
 
 <img width="406" alt="Screen Shot 2022-10-14 at 5 45 52 PM" src="https://user-images.githubusercontent.com/37753494/195948836-e08cdea8-697d-4d7f-8382-3b6ba6feee0f.png">
+
 The big-O scaling indicates that alg1 is much slower than alg2. 
+
 <img width="422" alt="Screen Shot 2022-10-14 at 5 45 57 PM" src="https://user-images.githubusercontent.com/37753494/195948852-f48e5b46-350b-44d6-ab94-d15e56213b6f.png">
 alg1 performs better than alg2 with data2.
 <img width="447" alt="Screen Shot 2022-10-14 at 5 46 02 PM" src="https://user-images.githubusercontent.com/37753494/195948857-6bbfc423-2ef4-47b1-8b4a-9fc6d85c0740.png">
