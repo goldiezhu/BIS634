@@ -118,7 +118,7 @@ This plot compares the performace of alg1 for both datasets.
 
 <img width="388" alt="Screen Shot 2022-10-14 at 5 46 06 PM" src="https://user-images.githubusercontent.com/37753494/195948904-71a27163-302e-4f5c-bcb6-ff07cca3003d.png">
 
-Conclusion: alg1 seems to be O(n**2) and alg2 seems to be O(n*logn). alg2 would perform much better for arbitrary data because it is faster at sorting and shows more consistent good performance.
+Conclusion: alg1 (bubble sort) seems to be O(n**2) and alg2 (merge sort) seems to be O(n*logn). alg2 would perform much better for arbitrary data because it is faster at sorting and shows more consistent good performance.
 
 Parallelize Explanation: To parallelize alg2, you must find tasks that can be done at the same time. In this case, there aren't independent tasks/functions so it is better to breakdown the dataset and run the ordering simultaneously. The ordering of the left and the right half of a dataset can be independent and after the ordering is finished, you can merge the two ordered halves.
 
