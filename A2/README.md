@@ -85,8 +85,10 @@ Below is loglog plot that shows the tree is O(n log n) and the runtime lies betw
 <img width="390" alt="Screen Shot 2022-10-14 at 5 42 01 PM" src="https://user-images.githubusercontent.com/37753494/195948352-cb29fb79-3bdd-4ba6-825c-75a97d6bf22b.png">
 
 ### Exercise 4
-Hypothesis: The two functions order the list from least to greatest.
+
 <img width="434" alt="Screen Shot 2022-10-14 at 5 51 44 PM" src="https://user-images.githubusercontent.com/37753494/195949390-4af63416-757d-4914-864b-a08276ab8c82.png">
+
+Hypothesis: The two functions order the list from least to greatest.
 
 alg1 iterates thru a list of numbers and arranges them from least to greatest. After making sure that the input is a list, the boolean value "changes" makes sure that the "while" function hasn't reached the end of the list yet. The for loop in the while loop switches the places of two numbers if the second number is smaller than the first one. If "changes" is False, then the while loop ends and it returns the ordered list.
 
@@ -96,6 +98,7 @@ alg2 first checks if the inputted list is longer than one number. If it is, then
 
 Below is the log-log graph timing the performance of alg1 and alg2:
 This plot has all algs and data sets.
+
 <img width="416" alt="Screen Shot 2022-10-14 at 5 45 48 PM" src="https://user-images.githubusercontent.com/37753494/195948808-e04553fb-6b56-4d6c-9a32-8059e547a212.png">
 
 
@@ -109,6 +112,7 @@ alg1 performs better than alg2 with data2.
 alg2 performs better than alg1 with data3.
 
 This plot compares the performace of alg1 for both datasets.
+
 <img width="388" alt="Screen Shot 2022-10-14 at 5 46 06 PM" src="https://user-images.githubusercontent.com/37753494/195948904-71a27163-302e-4f5c-bcb6-ff07cca3003d.png">
 
 Conclusion: alg1 seems to be O(n**2) and alg2 seems to be O(n*logn). alg2 would perform much better for arbitrary data because it is faster at sorting and shows more consistent good performance.
