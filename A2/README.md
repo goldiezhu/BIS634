@@ -122,6 +122,12 @@ Conclusion: alg1 seems to be O(n**2) and alg2 seems to be O(n*logn). alg2 would 
 
 Parallelize Explanation: To parallelize alg2, you must find tasks that can be done at the same time. In this case, there aren't independent tasks/functions so it is better to breakdown the dataset and run the ordering simultaneously. The ordering of the left and the right half of a dataset can be independent and after the ordering is finished, you can merge the two ordered halves.
 
+Comparison: The pool takes some time to initialize which is why the parallel code is initially slower than the regular code. A little before the length of 10^3, the parallel code starts to run faster than the regular code.
+
+<img width="580" alt="Screen Shot 2022-10-14 at 6 46 52 PM" src="https://user-images.githubusercontent.com/37753494/195954475-3f92106a-ae70-413e-9cf9-90b1161a6bee.png">
+
+
+
 ### Appendix
 Exercise 2
 ```
