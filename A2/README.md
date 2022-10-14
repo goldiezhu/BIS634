@@ -79,6 +79,7 @@ def add(self, value):
         self.right = Tree(value)
 ```
 Below is loglog plot that demonstrates in is executing in O(log n) times: 
+
 <img width="388" alt="Screen Shot 2022-10-14 at 5 40 44 PM" src="https://user-images.githubusercontent.com/37753494/195948238-d9a8dbe0-2e3c-459b-a7a7-9c8e47378f4e.png">
 
 Below is loglog plot that shows the tree is O(n log n) and the runtime lies between a curve that is O(n) and one that is O(n**2):
