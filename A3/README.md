@@ -16,9 +16,11 @@ def get_pmids(condition, year):
         #print(i.childNodes[0].wholeText)
     return pmids
 
+#get PMIDS
 alzh_pmids_list = get_pmids("Alzheimers", 2022)
 cancer_pmids_list = get_pmids("Cancer", 2022)
 
+#Change list to comma separated list
 alzh_pmids = ",".join(alzh_pmids_list)
 cancer_pmids = ",".join(cancer_pmids_list)
 ```
@@ -43,7 +45,8 @@ def get_info(pmids):
     counter = 0
     for i in articles:
         metadata_dict = {}
-
+        
+        #stores PMID
         pmid_current_tag = doc.getElementsByTagName("PMID")
         pmid_current = ET.fromstring(pmid_current_tag[counter].toxml())
         pmid_current_decoded = ET.tostring(pmid_current, method = "text").decode()
@@ -53,6 +56,7 @@ def get_info(pmids):
         all_abstract = ""
         titles = i.getElementsByTagName("ArticleTitle")
         abstracts = i.getElementsByTagName("AbstractText")
+        #Stores Title(s)
         try:
             title.length >= 1
         except:
@@ -62,7 +66,8 @@ def get_info(pmids):
                 all_title += title + " "   
         else:
             all_title = "No title"
-            
+        
+        #Stores Abstracts
         try:
             abstracts.length >= 1
         except:
@@ -72,12 +77,14 @@ def get_info(pmids):
                 abstract_forDecode = ET.fromstring(abstracts[k].toxml())
                 abstract = ET.tostring(abstract_forDecode, method = "text").decode()
                 all_abstract += abstract + " "
-
+        
+        #Stores Query
         if pmid_current_decoded in alzh_pmids:
             query = "Alzheimers"
         else:
             query = "Cancer"
 
+        #Insert into dictionary
         metadata_dict["ArticleTitle"] = all_title
         metadata_dict["AbstractText"] = all_abstract
         metadata_dict["query"] = query
@@ -87,9 +94,11 @@ def get_info(pmids):
     #print("counter", counter)
     return metadata_dict_w_pmid
 
+#Get metadata in the form of a dictionary
 alzh_metadata_dict = get_info(alzh_pmids)
 cancer_metadata_dict = get_info(cancer_pmids)
 
+#Dump dictionary into a JSON
 alzh_dump = json.dumps(alzh_metadata_dict, indent=4)
 cancer_dump = json.dumps(cancer_metadata_dict, indent=4)
  
@@ -126,10 +135,59 @@ Calculate the Alzheimers dataset's SPECTER
 ```
 alzh_specter = specter(alzh_metadata_dict)
 ```
-Calculate the Alzheimers dataset's SPECTER
+Calculate the Cancer dataset's SPECTER
 ```
-alzh_specter = specter(alzh_metadata_dict)
+cancer_specter = specter(cancer_metadata_dict)
 ```
+Function to calculate PCA
+```
+from sklearn import decomposition
+import pandas as pd
+
+def pca(embeddings, papers):
+    pca = decomposition.PCA(n_components=3)
+    embeddings_pca = pd.DataFrame(
+        pca.fit_transform(embeddings),
+        columns=['PC0', 'PC1', 'PC2']
+    )
+    embeddings_pca["query"] = [paper["query"] for paper in papers.values()]
+    return embeddings_pca
+```
+Calculate PCAs
+```
+cancer_pca = pca(cancer_specter, cancer_metadata_dict)
+alzh_pca = pca(alzh_specter, alzh_metadata_dict)
+```
+Combine PCAs into one dataframe
+```
+frames = [alzh_pca, cancer_pca]
+result = pd.concat(frames)
+print(result)
+```
+Output
+<img width="348" alt="Screen Shot 2022-11-01 at 8 07 36 PM" src="https://user-images.githubusercontent.com/37753494/199364763-56f6e618-fba9-46b3-b44a-d21a1a09e6b2.png">
+
+Graph PCAs
+```
+import seaborn as sns
+
+plt.figure(figsize=(16,10))
+sns.scatterplot(
+    x="PC0", y="PC1",
+    hue="query",
+    palette=sns.color_palette("deep", 2),
+    data=result,
+    legend="full",
+    alpha=0.3
+)
+```
+
+PCA graphs
+<img width="954" alt="Screen Shot 2022-11-01 at 8 07 44 PM" src="https://user-images.githubusercontent.com/37753494/199364788-61641a1c-af1b-4462-990d-c55126ad3a93.png">
+<img width="949" alt="Screen Shot 2022-11-01 at 8 07 52 PM" src="https://user-images.githubusercontent.com/37753494/199364793-69030133-ec60-4a7b-8dd9-8387df726fbf.png">
+<img width="945" alt="Screen Shot 2022-11-01 at 8 08 00 PM" src="https://user-images.githubusercontent.com/37753494/199364799-83875a3a-6fdd-461e-9e52-e97a2224a7ba.png">
+
+//comment on separation or lack thereof
 
 
 ### Exercise 4
