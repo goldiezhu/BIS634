@@ -209,8 +209,7 @@ df1 is for database administrator roles while df2 is for hardware engineers. It 
 <img width="374" alt="Screen Shot 2022-11-02 at 1 41 02 PM" src="https://user-images.githubusercontent.com/37753494/199562432-ea9756bb-67e3-491e-9a36-0ef0e54ea82f.png">
 This is the distribution of values for different columns on the full dataset. This analysis was done on ten columns and returned the same distribution for all of them.
 
-<img width="361" alt="Screen Shot 2022-11-02 at 1 44 36 PM" src="https://user-
-images.githubusercontent.com/37753494/199563306-9c47a7c9-3f19-4b3e-811a-9a765d312848.png">
+<img width="361" alt="Screen Shot 2022-11-02 at 1 44 36 PM" src="https://user-images.githubusercontent.com/37753494/199563886-4eb8f3e0-68da-4a3c-b52b-222cbd78aad8.png">
 <img width="468" alt="Screen Shot 2022-11-02 at 1 45 44 PM" src="https://user-images.githubusercontent.com/37753494/199563423-421c2388-97c0-4b77-9284-497230778958.png">
 <img width="463" alt="Screen Shot 2022-11-02 at 1 45 56 PM" src="https://user-images.githubusercontent.com/37753494/199563427-f52e634e-61f7-4553-980c-03c273fcb12a.png">
 <img width="465" alt="Screen Shot 2022-11-02 at 1 45 51 PM" src="https://user-images.githubusercontent.com/37753494/199563428-34fe5cd2-47c9-4bfe-806e-4c0e409b70a6.png">
