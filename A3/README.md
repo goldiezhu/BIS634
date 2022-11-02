@@ -165,7 +165,7 @@ result = pd.concat(frames)
 print(result)
 ```
 Output
-\n
+
 <img width="348" alt="Screen Shot 2022-11-01 at 8 07 36 PM" src="https://user-images.githubusercontent.com/37753494/199364763-56f6e618-fba9-46b3-b44a-d21a1a09e6b2.png">
 
 Graph PCAs
