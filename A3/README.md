@@ -199,6 +199,7 @@ My data does not need to be cleaned because I ran code to check for null/NaN val
 This data set is likely not legitimate as the analysis of it showed suspiciously similar numbers. The distribution of the numbers are the same across all "Roles" and even the roles with different column values showed the same rounded values. 
 
 Below is some analysis and charts that were done:
+
 <img width="465" alt="Screen Shot 2022-11-02 at 1 36 02 PM" src="https://user-images.githubusercontent.com/37753494/199562127-db838b5c-36cc-43f3-9795-1dc0087d6089.png">
 This dataframe extends right and shows that there are no null values.
 
@@ -208,8 +209,9 @@ df1 is for database administrator roles while df2 is for hardware engineers. It 
 <img width="374" alt="Screen Shot 2022-11-02 at 1 41 02 PM" src="https://user-images.githubusercontent.com/37753494/199562432-ea9756bb-67e3-491e-9a36-0ef0e54ea82f.png">
 This is the distribution of values for different columns on the full dataset. This analysis was done on ten columns and returned the same distribution for all of them.
 
-<img width="361" alt="Screen Shot 2022-11-02 at 1 44 36 PM" src="https://user-<img width="468" alt="Screen Shot 2022-11-02 at 1 45 44 PM" src="https://user-images.githubusercontent.com/37753494/199563423-421c2388-97c0-4b77-9284-497230778958.png">
+<img width="361" alt="Screen Shot 2022-11-02 at 1 44 36 PM" src="https://user-
+images.githubusercontent.com/37753494/199563306-9c47a7c9-3f19-4b3e-811a-9a765d312848.png">
+<img width="468" alt="Screen Shot 2022-11-02 at 1 45 44 PM" src="https://user-images.githubusercontent.com/37753494/199563423-421c2388-97c0-4b77-9284-497230778958.png">
 <img width="463" alt="Screen Shot 2022-11-02 at 1 45 56 PM" src="https://user-images.githubusercontent.com/37753494/199563427-f52e634e-61f7-4553-980c-03c273fcb12a.png">
 <img width="465" alt="Screen Shot 2022-11-02 at 1 45 51 PM" src="https://user-images.githubusercontent.com/37753494/199563428-34fe5cd2-47c9-4bfe-806e-4c0e409b70a6.png">
-images.githubusercontent.com/37753494/199563306-9c47a7c9-3f19-4b3e-811a-9a765d312848.png">
 
