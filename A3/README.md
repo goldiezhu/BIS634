@@ -179,11 +179,13 @@ sns.scatterplot(
 PCA graphs
 
 <img width="894" alt="Screen Shot 2022-11-01 at 9 14 10 PM" src="https://user-images.githubusercontent.com/37753494/199371767-dd569439-84e9-4c5a-8191-3a2f42aa114b.png">
+
 <img width="886" alt="Screen Shot 2022-11-01 at 9 14 18 PM" src="https://user-images.githubusercontent.com/37753494/199371779-0b2baf86-b2ef-4e6d-b49a-99e22425554e.png">
+
+
 <img width="890" alt="Screen Shot 2022-11-01 at 9 14 29 PM" src="https://user-images.githubusercontent.com/37753494/199371794-c24e4534-3d58-45cb-a3b5-3f5ec4c0052d.png">
 
-
-//comment on separation or lack thereof
+PC1 vs PC2 graphed together shows a lot of overlap and not a lot of separation. This is not desirable and means that the data differences between the variables of the two groups are small. PC0 vs PC2 graphed together shows a clear separation and two prominent clusters slanting towards each other while PC0 vs PC2 graphed together shows a clear separation and two prominent clusters. This indicates that there is a clear difference in the variables of the two groups as similar observations are put together in clusters. The possible slight overlap means that the data from the two groups are slightly similar but still very different as the clusters are clearly separated.
 
 
 ### Exercise 4
