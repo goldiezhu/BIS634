@@ -198,7 +198,7 @@ My data does not need to be cleaned because I ran code to check for null/NaN val
 
 This data set is likely not legitimate as the analysis of it showed suspiciously similar numbers. The distribution of the numbers are the same across all "Roles" and even the roles with different column values showed the same rounded values. 
 
-Below is some analysis and charts that were done:
+Below is some analysis and charts that were done (More tests can be seen in the code but they show the same information):
 
 <img width="465" alt="Screen Shot 2022-11-02 at 1 36 02 PM" src="https://user-images.githubusercontent.com/37753494/199562127-db838b5c-36cc-43f3-9795-1dc0087d6089.png">
 This dataframe extends right and shows that there are no null values.
@@ -214,3 +214,236 @@ This is the distribution of values for different columns on the full dataset. Th
 <img width="463" alt="Screen Shot 2022-11-02 at 1 45 56 PM" src="https://user-images.githubusercontent.com/37753494/199563427-f52e634e-61f7-4553-980c-03c273fcb12a.png">
 <img width="465" alt="Screen Shot 2022-11-02 at 1 45 51 PM" src="https://user-images.githubusercontent.com/37753494/199563428-34fe5cd2-47c9-4bfe-806e-4c0e409b70a6.png">
 
+
+Appendix:
+
+Exercise 1:
+```
+from inspect import isdatadescriptor
+import requests
+import xml.dom.minidom as m
+import xml.etree.ElementTree as ET
+import json
+
+def get_pmids(condition, year):
+    pmids = []
+    r = requests.get(
+        f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term={condition}+AND+{year}[pdat]&retmode=xml&retmax=1000"
+    )
+    doc = m.parseString(r.text)
+    ids = doc.getElementsByTagName("Id")
+    for i in ids:
+        pmids.append(i.childNodes[0].wholeText)
+        #print(i.childNodes[0].wholeText)
+    return pmids
+
+alzh_pmids_list = get_pmids("Alzheimers", 2022)
+cancer_pmids_list = get_pmids("Cancer", 2022)
+
+alzh_pmids = ",".join(alzh_pmids_list)
+cancer_pmids = ",".join(cancer_pmids_list)
+
+#print(alzh_pmids, "\n", cancer_pmids)
+
+def get_info(pmids):
+    metadata_dict_w_pmid = {}
+    url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+    r = requests.post(
+        url, data = {
+                        "id": pmids,
+                        "db": "PubMed",
+                        "retmode": "xml"
+                    }
+    )
+
+    doc = m.parseString(r.text)
+    #print(pmid_current_decoded)
+    
+    articles = doc.getElementsByTagName("MedlineCitation")
+    #print("articles.length", articles.length)
+    counter = 0
+    for i in articles:
+        metadata_dict = {}
+
+        pmid_current_tag = doc.getElementsByTagName("PMID")
+        pmid_current = ET.fromstring(pmid_current_tag[counter].toxml())
+        pmid_current_decoded = ET.tostring(pmid_current, method = "text").decode()
+        #print(pmid_current_decoded)
+        
+        all_title = ""
+        all_abstract = ""
+        titles = i.getElementsByTagName("ArticleTitle")
+        abstracts = i.getElementsByTagName("AbstractText")
+        try:
+            title.length >= 1
+        except:
+            for j in range(titles.length):
+                title_forDecode = ET.fromstring(titles[j].toxml())
+                title = ET.tostring(title_forDecode, method = "text").decode()
+                all_title += title + " "   
+        else:
+            all_title = "No title"
+            
+
+        try:
+            abstracts.length >= 1
+        except:
+            all_abstract = "No Abstract"
+        else:
+            for k in range(abstracts.length):
+                abstract_forDecode = ET.fromstring(abstracts[k].toxml())
+                abstract = ET.tostring(abstract_forDecode, method = "text").decode()
+                all_abstract += abstract + " "
+
+        if pmid_current_decoded in alzh_pmids:
+            query = "Alzheimers"
+        else:
+            query = "Cancer"
+
+        metadata_dict["ArticleTitle"] = all_title
+        metadata_dict["AbstractText"] = all_abstract
+        metadata_dict["query"] = query
+        metadata_dict_w_pmid[pmid_current_decoded] = metadata_dict
+        counter += 1
+
+    #print("counter", counter)
+    return metadata_dict_w_pmid
+
+alzh_metadata_dict = get_info(alzh_pmids)
+cancer_metadata_dict = get_info(cancer_pmids)
+
+alzh_dump = json.dumps(alzh_metadata_dict, indent=4)
+cancer_dump = json.dumps(cancer_metadata_dict, indent=4)
+ 
+with open("alzheimer_metadata.json", "w") as outfile:
+    outfile.write(alzh_dump)
+with open("cancer_metadata.json", "w") as outfile:
+    outfile.write(cancer_dump)
+    
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
+print(intersection(alzh_pmids_list,cancer_pmids_list))
+```
+
+Exercise 2:
+```
+from transformers import AutoTokenizer, AutoModel
+
+# load model and tokenizer
+tokenizer = AutoTokenizer.from_pretrained('allenai/specter')
+model = AutoModel.from_pretrained('allenai/specter')
+
+import tqdm
+
+# we can use a persistent dictionary (via shelve) so we can stop and restart if needed
+# alternatively, do the same but with embeddings starting as an empty dictionary
+
+def specter(papers):
+    embeddings = {}
+    for pmid, paper in tqdm.tqdm(papers.items()):
+        data = [paper["ArticleTitle"] + tokenizer.sep_token + paper["AbstractText"]]
+        inputs = tokenizer(
+            data, padding=True, truncation=True, return_tensors="pt", max_length=512
+        )
+        result = model(**inputs)
+        # take the first token in the batch as the embedding
+        embeddings[pmid] = result.last_hidden_state[:, 0, :].detach().numpy()[0]
+
+    # turn our dictionary into a list
+    embeddings = [embeddings[pmid] for pmid in papers.keys()]
+    return embeddings
+    
+z = {**alzh_metadata_dict, **cancer_metadata_dict}
+combined_specter = specter(z)
+
+from sklearn import decomposition
+import pandas as pd
+
+def pca(embeddings, papers):
+    pca = decomposition.PCA(n_components=3)
+    embeddings_pca = pd.DataFrame(
+        pca.fit_transform(embeddings),
+        columns=['PC0', 'PC1', 'PC2']
+    )
+    embeddings_pca["query"] = [paper["query"] for paper in papers.values()]
+    return embeddings_pca
+
+combined_pca = pca(combined_specter, z)
+print(combined_pca)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(16,10))
+sns.scatterplot(
+    x="PC0", y="PC1",
+    hue="query",
+    palette=sns.color_palette("deep", 2),
+    data=combined_pca,
+    legend="full",
+    alpha=0.3
+)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(16,10))
+sns.scatterplot(
+    x="PC0", y="PC2",
+    hue="query",
+    palette=sns.color_palette("deep", 2),
+    data=combined_pca,
+    legend="full",
+    alpha=0.3
+)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(16,10))
+sns.scatterplot(
+    x="PC1", y="PC2",
+    hue="query",
+    palette=sns.color_palette("deep", 2),
+    data=combined_pca,
+    legend="full",
+    alpha=0.3
+)
+```
+
+Exercise 4:
+``` 
+#only includes a few examples as the same code run on different columns returned the same values
+
+import pandas as pd
+df = pd.read_csv ('dataset9000.csv')
+print(df)
+
+df.info()
+
+df.Role.unique()
+
+df.isnull()
+
+df1 = df[df['Role'] == "Database Administrator"]
+print(df1)
+df2 = df[df['Role'] == "Hardware Engineer"]
+print(df2)
+
+df1['Cyber Security'].value_counts()
+df2['Cyber Security'].value_counts()
+df2['Computer Architecture'].value_counts()
+
+df['Database Fundamentals'].value_counts()
+df2['Distributed Computing Systems'].value_counts()
+df['Computer Architecture'].value_counts() 
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+df['Distributed Computing Systems'].value_counts().plot(kind='bar', title = "Distributed Computing Systems Competence")
+df1['Cyber Security'].value_counts().plot(kind='bar', title = "Computer Architecture Competence for Database Admins")
+df2['Computer Architecture'].value_counts().plot(kind='bar', title = "Computer Architecture Competence for Hardware Engineers")
+```
