@@ -199,10 +199,10 @@ My data does not need to be cleaned because I ran code to check for null/NaN val
 This data set is likely not legitimate as the analysis of it showed suspiciously similar numbers. The distribution of the numbers are the same across all "Roles" and even the roles with different column values showed the same rounded values. 
 
 Below is some analysis and charts that were done:
-<img width="465" alt="Screen Shot 2022-11-02 at 1 36 02 PM" src="https://user-images.githubusercontent.com/37753494/199562127-db838b5c-36cc-43f3-9795-1dc0087d6089.png
+<img width="465" alt="Screen Shot 2022-11-02 at 1 36 02 PM" src="https://user-images.githubusercontent.com/37753494/199562127-db838b5c-36cc-43f3-9795-1dc0087d6089.png">
 This dataframe extends right and shows that there are no null values.
 
-img width="870" alt="Screen Shot 2022-11-02 at 1 39 46 PM" src="https://user-images.githubusercontent.com/37753494/199562198-7f8c7b08-6bdf-4bb9-b3ec-7dcd9e26f3a7.png">
+<img width="870" alt="Screen Shot 2022-11-02 at 1 39 46 PM" src="https://user-images.githubusercontent.com/37753494/199562198-7f8c7b08-6bdf-4bb9-b3ec-7dcd9e26f3a7.png">
 df1 is for database administrator roles while df2 is for hardware engineers. It is strange that the distribution of values is the same for different roles.
 
 <img width="374" alt="Screen Shot 2022-11-02 at 1 41 02 PM" src="https://user-images.githubusercontent.com/37753494/199562432-ea9756bb-67e3-491e-9a36-0ef0e54ea82f.png">
