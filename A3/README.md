@@ -192,7 +192,9 @@ PCA graphs
 
 
 ### Exercise 4
-The dataset I chose is an IT Career Proficiency Dataset from Mendeley Data. There are around 9000 survey responses and 18 variables. The data was from a survey for professionsls who assessed their abilities in various IT and software fields. The key variables are specified. None of the variables are redundant or exactly derivable. Ideas for predictions include predicting tech proficiency based on job ("Role") or  predicting role based on interest or level of qualification in tech fields. As all of the variables are related to level of expertise in IT fields, most of the variables can be trained and predicted with models. The data is in a standard format.
+The dataset I chose is an IT Career Proficiency Dataset from Mendeley Data. There are around 9000 (9179 lines) survey responses and 18 variables. The data was from a survey for professionsls who assessed their abilities in various IT and software fields. The key variables are specified. None of the variables are redundant or exactly derivable. Ideas for predictions include predicting tech proficiency based on job ("Role") or  predicting role based on interest or level of qualification in tech fields. As all of the variables are related to level of expertise in IT fields, most of the variables can be trained and predicted with models. The data is in a standard format.
 
 The dataset was published on 28 Oct 2022 and is licensed under a Creative Commons Attribution 4.0 International license. The data can be shared, copied, and modified as long as due credit is given, a link to the CC BY license is given, and any changes made are indicated. Diagnostic and prescriptive analyses cannot be done on this dataset but Predictive analyses, such as job prediction previously mentioned, and Descriptive Analyses, such as clustering and classification, are suitable for this dataset.
 The link to the data is: https://data.mendeley.com/datasets/kzt6h7pz97/1
+
+My data does not need to be cleaned because I ran code to check for null/NaN values and ambiguous data points, which there were none. This is done with isnull() and df.(column name).unique().
