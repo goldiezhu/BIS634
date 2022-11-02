@@ -189,9 +189,27 @@ PC1 vs PC2 graphed together shows a lot of overlap and not a lot of separation. 
 
 
 ### Exercise 4
-The dataset I chose is an IT Career Proficiency Dataset from Mendeley Data. There are around 9000 (9179 lines) survey responses and 18 variables. The data was from a survey for professionsls who assessed their abilities in various IT and software fields. The key variables are specified. None of the variables are redundant or exactly derivable. Ideas for predictions include predicting tech proficiency based on job ("Role") or  predicting role based on interest or level of qualification in tech fields. As all of the variables are related to level of expertise in IT fields, most of the variables can be trained and predicted with models. The data is in a standard format.
+The dataset I chose is an IT Career Proficiency Dataset from Mendeley Data. There are around 9000 (9179 lines) survey responses and 18 variables. The data was from a survey for professionals who assessed their abilities in various IT and software fields. The key variables are specified. None of the variables are redundant or exactly derivable. Ideas for predictions include predicting tech proficiency based on job ("Role") or  predicting role based on interest or level of qualification in tech fields. As all of the variables are related to level of expertise in IT fields, most of the variables can be trained and predicted with models. The data is in a standard format.
 
 The dataset was published on 28 Oct 2022 and is licensed under a Creative Commons Attribution 4.0 International license. The data can be shared, copied, and modified as long as due credit is given, a link to the CC BY license is given, and any changes made are indicated. Diagnostic and prescriptive analyses cannot be done on this dataset but Predictive analyses, such as job prediction previously mentioned, and Descriptive Analyses, such as clustering and classification, are suitable for this dataset.
 The link to the data is: https://data.mendeley.com/datasets/kzt6h7pz97/1
 
 My data does not need to be cleaned because I ran code to check for null/NaN values and ambiguous data points, which there were none. This is done with isnull() and df.(column name).unique().
+
+This data set is likely not legitimate as the analysis of it showed suspiciously similar numbers. The distribution of the numbers are the same across all "Roles" and even the roles with different column values showed the same rounded values. 
+
+Below is some analysis and charts that were done:
+<img width="465" alt="Screen Shot 2022-11-02 at 1 36 02 PM" src="https://user-images.githubusercontent.com/37753494/199562127-db838b5c-36cc-43f3-9795-1dc0087d6089.png
+This dataframe extends right and shows that there are no null values.
+
+img width="870" alt="Screen Shot 2022-11-02 at 1 39 46 PM" src="https://user-images.githubusercontent.com/37753494/199562198-7f8c7b08-6bdf-4bb9-b3ec-7dcd9e26f3a7.png">
+df1 is for database administrator roles while df2 is for hardware engineers. It is strange that the distribution of values is the same for different roles.
+
+<img width="374" alt="Screen Shot 2022-11-02 at 1 41 02 PM" src="https://user-images.githubusercontent.com/37753494/199562432-ea9756bb-67e3-491e-9a36-0ef0e54ea82f.png">
+This is the distribution of values for different columns on the full dataset. This analysis was done on ten columns and returned the same distribution for all of them.
+
+<img width="361" alt="Screen Shot 2022-11-02 at 1 44 36 PM" src="https://user-<img width="468" alt="Screen Shot 2022-11-02 at 1 45 44 PM" src="https://user-images.githubusercontent.com/37753494/199563423-421c2388-97c0-4b77-9284-497230778958.png">
+<img width="463" alt="Screen Shot 2022-11-02 at 1 45 56 PM" src="https://user-images.githubusercontent.com/37753494/199563427-f52e634e-61f7-4553-980c-03c273fcb12a.png">
+<img width="465" alt="Screen Shot 2022-11-02 at 1 45 51 PM" src="https://user-images.githubusercontent.com/37753494/199563428-34fe5cd2-47c9-4bfe-806e-4c0e409b70a6.png">
+images.githubusercontent.com/37753494/199563306-9c47a7c9-3f19-4b3e-811a-9a765d312848.png">
+
