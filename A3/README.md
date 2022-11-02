@@ -131,13 +131,10 @@ def specter(papers):
     embeddings = [embeddings[pmid] for pmid in papers.keys()]
     return embeddings
 ```
-Calculate the Alzheimers dataset's SPECTER
+Combine Dictionaries and Calculate the SPECTER
 ```
-alzh_specter = specter(alzh_metadata_dict)
-```
-Calculate the Cancer dataset's SPECTER
-```
-cancer_specter = specter(cancer_metadata_dict)
+z = {**alzh_metadata_dict, **cancer_metadata_dict}
+combined_specter = specter(z)
 ```
 Function to calculate PCA
 ```
@@ -155,18 +152,14 @@ def pca(embeddings, papers):
 ```
 Calculate PCAs
 ```
-cancer_pca = pca(cancer_specter, cancer_metadata_dict)
-alzh_pca = pca(alzh_specter, alzh_metadata_dict)
+combined_pca = pca(combined_specter, z)
+print(combined_pca)
 ```
-Combine PCAs into one dataframe
-```
-frames = [alzh_pca, cancer_pca]
-result = pd.concat(frames)
-print(result)
-```
+
 Output
 
-<img width="348" alt="Screen Shot 2022-11-01 at 8 07 36 PM" src="https://user-images.githubusercontent.com/37753494/199364763-56f6e618-fba9-46b3-b44a-d21a1a09e6b2.png">
+<img width="358" alt="Screen Shot 2022-11-01 at 9 15 31 PM" src="https://user-images.githubusercontent.com/37753494/199371838-c8293f12-3f7c-4609-94d9-55113f01a4f6.png">
+
 
 Graph PCAs
 ```
@@ -184,9 +177,11 @@ sns.scatterplot(
 ```
 
 PCA graphs
-<img width="954" alt="Screen Shot 2022-11-01 at 8 07 44 PM" src="https://user-images.githubusercontent.com/37753494/199364788-61641a1c-af1b-4462-990d-c55126ad3a93.png">
-<img width="949" alt="Screen Shot 2022-11-01 at 8 07 52 PM" src="https://user-images.githubusercontent.com/37753494/199364793-69030133-ec60-4a7b-8dd9-8387df726fbf.png">
-<img width="945" alt="Screen Shot 2022-11-01 at 8 08 00 PM" src="https://user-images.githubusercontent.com/37753494/199364799-83875a3a-6fdd-461e-9e52-e97a2224a7ba.png">
+
+<img width="894" alt="Screen Shot 2022-11-01 at 9 14 10 PM" src="https://user-images.githubusercontent.com/37753494/199371767-dd569439-84e9-4c5a-8191-3a2f42aa114b.png">
+<img width="886" alt="Screen Shot 2022-11-01 at 9 14 18 PM" src="https://user-images.githubusercontent.com/37753494/199371779-0b2baf86-b2ef-4e6d-b49a-99e22425554e.png">
+<img width="890" alt="Screen Shot 2022-11-01 at 9 14 29 PM" src="https://user-images.githubusercontent.com/37753494/199371794-c24e4534-3d58-45cb-a3b5-3f5ec4c0052d.png">
+
 
 //comment on separation or lack thereof
 
