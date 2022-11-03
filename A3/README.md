@@ -189,7 +189,7 @@ PC1 vs PC2 graphed together shows a lot of overlap and not a lot of separation. 
 
 ### Exercise 3
 Function for Explicit Euler method
-···
+```
 def explicitEuler(s, i, r, beta, gamma, N, timestep):
     dsdt = -beta/N * s * i
     didt = beta/N * s * i - gamma * i
@@ -198,9 +198,9 @@ def explicitEuler(s, i, r, beta, gamma, N, timestep):
     i_updated = i + didt * timestep
     r_updated = r + drdt * timestep
     return s_updated, i_updated, r_updated
-···
+```
 SIR method
-···
+```
 s_values = []
 i_values = []
 r_values = []
@@ -225,9 +225,9 @@ def SIR(beta, gamma, timestep, Tmax, infected, N, s, i, r):
     print("The disease cases peaks on day", peak_day + 1, "at a case number of", sick_prev, "people")
     
     return s_values, i_values, r_values, peak_day, sick_prev
-···
+```
 Plot Euler Method
-···
+```
 import matplotlib.pyplot as plt
 
 SIR(2, 1, 1, 25, 1, 134000, 133999, 1, 0)
@@ -241,7 +241,7 @@ plt.xlabel("timestep, $t$ [s]")
 plt.ylabel("Numbers of individuals")
 plt.legend(loc = "best")
 plt.show()
-···
+```
 Time course of infection
 
 <img width="597" alt="Screen Shot 2022-11-03 at 12 07 31 AM" src="https://user-images.githubusercontent.com/37753494/199645774-30823b10-19f9-4e10-bced-e26f5896de43.png">
@@ -249,7 +249,7 @@ Time course of infection
 The number of infected people drops below 1 on day 21. The number of infected people peaked at 26034 on day 16.
 
 Heat map values
-···
+```
 x = 2
 y = 1
 day_peak = np.empty((20, 20), int)
@@ -260,7 +260,7 @@ for i in range(20):
         a, b, c, d, e = SIR(i, j, 1, 20, 1, 134000, 133999, 1, 0)
         day_peak[i][j] = d + 1
         indiv_peak[i][j] = e
-···
+```
 Peak day heat map
 <img width="489" alt="Screen Shot 2022-11-03 at 12 09 52 AM" src="https://user-images.githubusercontent.com/37753494/199646003-873e0327-5ff9-4ea3-bb29-2ec5e5369e1a.png">
 Peak number of individuals heat map
@@ -492,7 +492,7 @@ sns.scatterplot(
 )
 ```
 Exercise 3:
-'''
+```
 import numpy as np
 def explicitEuler(s, i, r, beta, gamma, N, timestep):
     dsdt = -beta/N * s * i
@@ -563,8 +563,7 @@ plt.show()
 im = plt.imshow(indiv_peak, cmap=plt.cm.RdBu, extent=(-3, 3, 3, -3), interpolation='bilinear')
 plt.colorbar(im)
 plt.show()
-
-'''
+```
 
 
 Exercise 4:
