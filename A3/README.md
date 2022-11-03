@@ -262,8 +262,10 @@ for i in range(20):
         indiv_peak[i][j] = e
 ```
 Peak day heat map
+
 <img width="489" alt="Screen Shot 2022-11-03 at 12 09 52 AM" src="https://user-images.githubusercontent.com/37753494/199646003-873e0327-5ff9-4ea3-bb29-2ec5e5369e1a.png">
 Peak number of individuals heat map
+
 <img width="515" alt="Screen Shot 2022-11-03 at 12 10 16 AM" src="https://user-images.githubusercontent.com/37753494/199646044-d79ba7bc-ac13-4885-873f-9ce4da320979.png">
 
 
