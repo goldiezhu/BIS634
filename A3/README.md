@@ -185,7 +185,86 @@ PCA graphs
 
 <img width="890" alt="Screen Shot 2022-11-01 at 9 14 29 PM" src="https://user-images.githubusercontent.com/37753494/199371794-c24e4534-3d58-45cb-a3b5-3f5ec4c0052d.png">
 
-PC1 vs PC2 graphed together shows a lot of overlap and not a lot of separation. This is not desirable and means that the data differences between the variables of the two groups are small. PC0 vs PC2 graphed together shows a clear separation and two prominent clusters slanting towards each other while PC0 vs PC2 graphed together shows a clear separation and two prominent clusters. This indicates that there is a clear difference in the variables of the two groups as similar observations are put together in clusters. The possible slight overlap means that the data from the two groups are slightly similar but still very different as the clusters are clearly separated.
+PC1 vs PC2 graphed together shows a lot of overlap and not a lot of separation. This is not desirable and means that the data differences between the variables of the two groups are small. PC0 vs PC2 graphed together shows a clear separation and two prominent clusters slanting towards each other while PC0 vs PC2 graphed together shows a clear separation and two prominent clusters. This indicates that there is a clear difference in the variables of the two groups as similar observations are put together in clusters. The possible slight overlap means that the data from the two groups are slightly similar but still very different as the clusters are clearly separated. When they are separated, they are more significant.
+
+### Exercise 3
+Function for Explicit Euler method
+’‘’
+def explicitEuler(s, i, r, beta, gamma, N, timestep):
+    dsdt = -beta/N * s * i
+    didt = beta/N * s * i - gamma * i
+    drdt = gamma * i
+    s_updated = s + dsdt * timestep
+    i_updated = i + didt * timestep
+    r_updated = r + drdt * timestep
+    return s_updated, i_updated, r_updated
+‘’‘
+SIR method
+'''
+s_values = []
+i_values = []
+r_values = []
+
+def SIR(beta, gamma, timestep, Tmax, infected, N, s, i, r):
+    peak_day = 0
+    sick_prev = 1
+    s_values.append(N - infected)
+    i_values.append(infected)
+    r_values.append(0)
+
+    for j in range(Tmax):
+        s_updated, i_updated, r_updated = explicitEuler(s_values[j], i_values[j], r_values[j], beta, gamma, N, timestep)
+        s_values.append(s_updated)
+        i_values.append(i_updated)
+        r_values.append(r_updated)
+
+        if i_updated > sick_prev:
+            sick_prev = i_updated
+            peak_day = j
+            
+    print("The disease cases peaks on day", peak_day + 1, "at a case number of", sick_prev, "people")
+    
+    return s_values, i_values, r_values, peak_day, sick_prev
+'''
+Plot Euler Method
+'''
+import matplotlib.pyplot as plt
+
+SIR(2, 1, 1, 25, 1, 134000, 133999, 1, 0)
+plt.figure()
+plt.title("Euler method")
+plt.plot(s_values, color = 'orange', label='Susceptible')
+plt.plot(i_values, 'r', label='Infected')
+plt.plot(r_values, 'g', label='Recovered with immunity')
+plt.grid()
+plt.xlabel("timestep, $t$ [s]")
+plt.ylabel("Numbers of individuals")
+plt.legend(loc = "best")
+plt.show()
+'''
+Time course of infection
+
+<img width="597" alt="Screen Shot 2022-11-03 at 12 07 31 AM" src="https://user-images.githubusercontent.com/37753494/199645774-30823b10-19f9-4e10-bced-e26f5896de43.png">
+
+The number of infected people drops below 1 on day 21. The number of infected people peaked at 26034 on day 16.
+
+Heat map values
+'''
+x = 2
+y = 1
+day_peak = np.empty((20, 20), int)
+indiv_peak = np.empty((20, 20), int)
+
+for i in range(20):
+    for j in range(20):
+        a, b, c, d, e = SIR(i, j, 1, 20, 1, 134000, 133999, 1, 0)
+        day_peak[i][j] = d + 1
+        indiv_peak[i][j] = e
+'''
+Peak day heat map
+<img width="489" alt="Screen Shot 2022-11-03 at 12 09 52 AM" src="https://user-images.githubusercontent.com/37753494/199646003-873e0327-5ff9-4ea3-bb29-2ec5e5369e1a.png">
+Peak number of individuals heat map
+<img width="515" alt="Screen Shot 2022-11-03 at 12 10 16 AM" src="https://user-images.githubusercontent.com/37753494/199646044-d79ba7bc-ac13-4885-873f-9ce4da320979.png">
 
 
 ### Exercise 4
@@ -412,6 +491,81 @@ sns.scatterplot(
     alpha=0.3
 )
 ```
+Exercise 3:
+'''
+import numpy as np
+def explicitEuler(s, i, r, beta, gamma, N, timestep):
+    dsdt = -beta/N * s * i
+    didt = beta/N * s * i - gamma * i
+    drdt = gamma * i
+    s_updated = s + dsdt * timestep
+    i_updated = i + didt * timestep
+    r_updated = r + drdt * timestep
+    return s_updated, i_updated, r_updated
+    
+s_values = []
+i_values = []
+r_values = []
+
+def SIR(beta, gamma, timestep, Tmax, infected, N, s, i, r):
+    peak_day = 0
+    sick_prev = 1
+    s_values.append(N - infected)
+    i_values.append(infected)
+    r_values.append(0)
+
+    for j in range(Tmax):
+        s_updated, i_updated, r_updated = explicitEuler(s_values[j], i_values[j], r_values[j], beta, gamma, N, timestep)
+        s_values.append(s_updated)
+        i_values.append(i_updated)
+        r_values.append(r_updated)
+
+        if i_updated > sick_prev:
+            sick_prev = i_updated
+            peak_day = j
+            
+    print("The disease cases peaks on day", peak_day + 1, "at a case number of", sick_prev, "people")
+    
+    return s_values, i_values, r_values, peak_day, sick_prev
+
+import matplotlib.pyplot as plt
+
+SIR(2, 1, 1, 25, 1, 134000, 133999, 1, 0)
+plt.figure()
+plt.title("Euler method")
+plt.plot(s_values, color = 'orange', label='Susceptible')
+plt.plot(i_values, 'r', label='Infected')
+plt.plot(r_values, 'g', label='Recovered with immunity')
+plt.grid()
+plt.xlabel("timestep, $t$ [s]")
+plt.ylabel("Numbers of individuals")
+plt.legend(loc = "best")
+plt.show()
+
+x = 2
+y = 1
+day_peak = np.empty((20, 20), int)
+indiv_peak = np.empty((20, 20), int)
+
+for i in range(20):
+    for j in range(20):
+        a, b, c, d, e = SIR(i, j, 1, 20, 1, 134000, 133999, 1, 0)
+        day_peak[i][j] = d + 1
+        indiv_peak[i][j] = e
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+im = plt.imshow(day_peak, cmap=plt.cm.RdBu, extent=(-3, 3, 3, -3), interpolation='bilinear')
+plt.colorbar(im)
+plt.show()
+
+im = plt.imshow(indiv_peak, cmap=plt.cm.RdBu, extent=(-3, 3, 3, -3), interpolation='bilinear')
+plt.colorbar(im)
+plt.show()
+
+'''
+
 
 Exercise 4:
 ``` 
