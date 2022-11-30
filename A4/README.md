@@ -40,23 +40,7 @@ def timeit(function, *args, n=3):
         times.append(time.time() - start)
     return min(times)
 
-ns = range(1,40)
-times = [timeit(fib_rec,n) for n in tqdm(ns)]
-(p9.ggplot(pd.DataFrame({'n':ns, 'time (s)': times}),
-p9.aes(x='n', y='time (s)'))
-+ p9.geom_point()
-+ p9.scale_x_continuous(trans='log10')
-+ p9.scale_y_continuous(trans='log10')).draw()
-```
-
-#### recursive with lru_cache
-```
 # The n-th Fibonacci number is the sum of the (n-1)th and (n-2)th
-from functools import lru_cache
-import time
-import pandas as pd
-import plotnine as p9
-from tqdm import tqdm
 
 ### LRU Cache ###
 @lru_cache()
@@ -75,11 +59,14 @@ def timeit(function, *args, n=3):
 
 ns = range(1,40)
 times = [timeit(fib_cache,n) for n in tqdm(ns)]
-(p9.ggplot(pd.DataFrame({'n':ns, 'time (s)': times}),
-p9.aes(x='n', y='time (s)'))
-+ p9.geom_point()
-+ p9.scale_x_continuous(trans='log10')
-+ p9.scale_y_continuous(trans='log10')).draw()
+times1 = [timeit(fib_rec,n) for n in tqdm(ns)]
+
+
+df = pd.DataFrame({'n':ns, 'time (s)': times, 'time1 (s)': times1})
+df['x'] = df.index
+p9.ggplot(p9.aes(x='n'), data=df) +\
+    p9.geom_line(p9.aes(y='time (s)'), color='blue') +\
+    p9.geom_line(p9.aes(y='time1 (s)'), color='red') 
 ```
 <img width="472" alt="Screen Shot 2022-11-30 at 5 27 25 PM" src="https://user-images.githubusercontent.com/37753494/204921848-1b2a8bce-eeb8-4221-82ec-7bad015aae74.png">
 
