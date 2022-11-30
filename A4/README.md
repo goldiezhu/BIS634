@@ -2,15 +2,33 @@
 ### Goldie Zhu
 
 ### Exercise 1
-Function to identify PubMed IDs
+2D Gradient Descent
 ```
-def get_pmids(condition, year):
-    pmids = []
-    r = requests.get(
-        f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term={condition}+AND+{year}[pdat]&retmode=xml&retmax=1000"
-    )
+import requests
 
+def error(a = 0.1, b = 0.1):
+    return float(requests.get(f"http://ramcdougal.com/cgi-bin/error_function.py?a={a}&b={b}", headers={"User-Agent": "MyScript"}).text)
+
+def optimize(a, b, h):
+    deriv_a = a - 0.1 * ((error(a + h,b) - error(a,b))/h)
+    deriv_b = b - 0.1 * ((error(a,b + h) - error(a,b))/h)
+    while abs(error(deriv_a, deriv_b) - error(a,b)) > 0.0001:
+        a, b = deriv_a, deriv_b
+        deriv_a = deriv_a - 0.1 * ((error(a + h,b) - error(a,b))/h)
+        deriv_b = deriv_b - 0.1 * ((error(a,b + h) - error(a,b))/h)
+    return deriv_a, deriv_b
+
+optimize(0.2, 0.3, 0.00001)
 ```
+I estimate the gradient using the following two equations, which combined makes the third equation. The equation uses small values of h to get closer to the desired approximation of the derivative.
+<img width="242" alt="Screen Shot 2022-11-30 at 6 39 51 PM" src="https://user-images.githubusercontent.com/37753494/204931469-362d58dd-0e52-4216-ae72-71320ba2f774.png">
+<img width="242" alt="Screen Shot 2022-11-30 at 6 39 56 PM" src="https://user-images.githubusercontent.com/37753494/204931470-b44fc796-ea33-40a4-8da8-17211de07bfb.png">
+
+<img width="514" alt="Screen Shot 2022-11-30 at 6 47 14 PM" src="https://user-images.githubusercontent.com/37753494/204932281-9f4865a3-1ab6-47e2-ad86-464b1682e747.png">
+
+I chose 0.0001 as the stopping criteria because I only needed a sufficiently small number. The steps are set to 0.1 because that is a standard step size and it doesn't have to be too small or else the calculation will take too long. I tested h for different values, with the closest being 1e-10. 
+<img width="270" alt="Screen Shot 2022-11-30 at 6 50 02 PM" src="https://user-images.githubusercontent.com/37753494/204932614-fd15d28a-a7ca-49fd-aee4-4d1a1ef8a141.png">
+
 
 
 ### Exercise 2
