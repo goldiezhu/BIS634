@@ -129,7 +129,9 @@ for j in range(k):
 ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
 plt.show()
 ```
+
 k = 3
+
 <img width="298" alt="Screen Shot 2022-11-30 at 9 20 49 PM" src="https://user-images.githubusercontent.com/37753494/204950405-69b226d0-78a7-45ec-b317-cd0c754fa054.png">
 
 <img width="297" alt="Screen Shot 2022-11-30 at 9 22 43 PM" src="https://user-images.githubusercontent.com/37753494/204950656-1038703e-b268-46da-991b-92157f6f78f5.png">
@@ -137,6 +139,7 @@ k = 3
 <img width="295" alt="Screen Shot 2022-11-30 at 9 23 44 PM" src="https://user-images.githubusercontent.com/37753494/204950747-ec9863be-9075-4c7b-b58f-4c57bfd840e5.png">
 
 k = 5
+
 <img width="503" alt="Screen Shot 2022-11-30 at 9 27 16 PM" src="https://user-images.githubusercontent.com/37753494/204951194-b5bb7865-3fc3-4b6e-abdc-412ea6d23c5a.png">
 <img width="261" alt="Screen Shot 2022-11-30 at 9 27 34 PM" src="https://user-images.githubusercontent.com/37753494/204951224-2599780e-41f4-4297-8dea-3f38fba4db6f.png">
 
@@ -159,6 +162,8 @@ k=15
 <img width="257" alt="Screen Shot 2022-11-30 at 9 34 22 PM" src="https://user-images.githubusercontent.com/37753494/204952165-7604e741-dd00-4bc5-b32c-a2ad120889f5.png">
 <img width="257" alt="Screen Shot 2022-11-30 at 9 34 30 PM" src="https://user-images.githubusercontent.com/37753494/204952166-3740b30f-45eb-495f-8e18-458d2e16854e.png">
 <img width="257" alt="Screen Shot 2022-11-30 at 9 37 09 PM" src="https://user-images.githubusercontent.com/37753494/204952559-1217e6f2-65fe-4bfa-9f7f-12ac991bc1e7.png">
+<img width="258" alt="Screen Shot 2022-11-30 at 9 41 52 PM" src="https://user-images.githubusercontent.com/37753494/204953271-e83f15fc-e67e-46a9-901b-bf625ee17a91.png">
+
 
 
 
