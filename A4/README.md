@@ -48,6 +48,91 @@ for k in minimums:
 
 
 ### Exercise 2
+Haversine
+```
+from math import radians, cos, sin, asin, sqrt
+
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance in kilometers between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+    return c * r
+```
+Plot
+```
+import pandas as pd
+import plotnine as p9
+import random
+import numpy as np
+k=3
+df = pd.read_csv('worldcities.csv')
+def normalize(series):
+    return (series - series.mean()) / series.std()
+
+pts = [np.array(pt) for pt in zip(df['lat'], df['lng'])]
+centers = random.sample(pts, k)
+old_cluster_ids, cluster_ids = None, [] # arbitrary but different
+while cluster_ids != old_cluster_ids:
+    old_cluster_ids = list(cluster_ids)
+    cluster_ids = []
+    for pt in pts:
+        min_cluster = -1
+        min_dist = float('inf')
+        for i, center in enumerate(centers):
+            dist = np.linalg.norm(pt - center)
+            if dist < min_dist:
+                min_cluster = i
+                min_dist = dist
+        cluster_ids.append(min_cluster)
+    df['cluster'] = cluster_ids
+    cluster_pts = [[pt for pt, cluster in zip(pts, cluster_ids) if cluster == match]
+        for match in range(k)]
+    centers = [sum(pts)/len(pts) for pts in cluster_pts]
+(p9.ggplot(df, p9.aes(x="lat", y="lng", color="cluster")) 
+    + p9.geom_point()).draw()
+```
+<img width="573" alt="Screen Shot 2022-11-30 at 9 19 36 PM" src="https://user-images.githubusercontent.com/37753494/204950275-ce69a67d-4595-4004-a8f2-8325be3d7e30.png">
+
+Coordinate data
+```
+coordinate_pairs = []
+for cluster in range(k):
+  clusters = [np.array(pt) for pt in zip(df[df['cluster']==cluster]['lat'], df[df['cluster']== cluster]['lng'])]
+  coordinate_pairs.append(clusters)
+```
+
+Cartopy plot
+```
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
+import random 
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection=ccrs.Robinson())
+lats = [pt[0] for pt in pts]
+lngs = [pt[1] for pt in pts]
+ax.coastlines()
+for j in range(k):
+  lats = [pt[0] for pt in coordinate_pairs[j]]
+  lngs = [pt[1] for pt in coordinate_pairs[j]]
+  ax.plot(lngs, lats, "o", transform=ccrs.PlateCarree())
+ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
+plt.show()
+```
+<img width="298" alt="Screen Shot 2022-11-30 at 9 20 49 PM" src="https://user-images.githubusercontent.com/37753494/204950405-69b226d0-78a7-45ec-b317-cd0c754fa054.png">
+
+
+
 
 
 ### Exercise 3 - Fibonacci
