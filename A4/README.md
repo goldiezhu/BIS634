@@ -164,7 +164,7 @@ k=15
 <img width="257" alt="Screen Shot 2022-11-30 at 9 37 09 PM" src="https://user-images.githubusercontent.com/37753494/204952559-1217e6f2-65fe-4bfa-9f7f-12ac991bc1e7.png">
 <img width="258" alt="Screen Shot 2022-11-30 at 9 41 52 PM" src="https://user-images.githubusercontent.com/37753494/204953271-e83f15fc-e67e-46a9-901b-bf625ee17a91.png">
 
-
+There seems to be more diversity and more complexly shaped clusters as k gets larger. When k was little, the cluster shapes remained basicallythe same. However, my k=15 did not show the full diversity and extend of the clusters so it is not representative of how k=15 should've looked..
 
 
 ### Exercise 3 - Fibonacci
@@ -395,6 +395,77 @@ for k in minimums:
 
 Exercise 2
 ```
+from math import radians, cos, sin, asin, sqrt
+
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance in kilometers between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+    return c * r
+    
+import pandas as pd
+import plotnine as p9
+import random
+import numpy as np
+k=3
+df = pd.read_csv('worldcities.csv')
+def normalize(series):
+    return (series - series.mean()) / series.std()
+
+pts = [np.array(pt) for pt in zip(df['lat'], df['lng'])]
+centers = random.sample(pts, k)
+old_cluster_ids, cluster_ids = None, [] # arbitrary but different
+while cluster_ids != old_cluster_ids:
+    old_cluster_ids = list(cluster_ids)
+    cluster_ids = []
+    for pt in pts:
+        min_cluster = -1
+        min_dist = float('inf')
+        for i, center in enumerate(centers):
+            dist = np.linalg.norm(pt - center)
+            if dist < min_dist:
+                min_cluster = i
+                min_dist = dist
+        cluster_ids.append(min_cluster)
+    df['cluster'] = cluster_ids
+    cluster_pts = [[pt for pt, cluster in zip(pts, cluster_ids) if cluster == match]
+        for match in range(k)]
+    centers = [sum(pts)/len(pts) for pts in cluster_pts]
+(p9.ggplot(df, p9.aes(x="lat", y="lng", color="cluster")) 
+    + p9.geom_point()).draw()
+    
+coordinate_pairs = []
+for cluster in range(k):
+  clusters = [np.array(pt) for pt in zip(df[df['cluster']==cluster]['lat'], df[df['cluster']== cluster]['lng'])]
+  coordinate_pairs.append(clusters)
+  
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
+import random 
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection=ccrs.Robinson())
+lats = [pt[0] for pt in pts]
+lngs = [pt[1] for pt in pts]
+ax.coastlines()
+for j in range(k):
+  lats = [pt[0] for pt in coordinate_pairs[j]]
+  lngs = [pt[1] for pt in coordinate_pairs[j]]
+  ax.plot(lngs, lats, "o", transform=ccrs.PlateCarree())
+ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
+plt.show()
+
+#change k and rerun code for different ks
 ```
 
 Exercise 3
@@ -452,5 +523,118 @@ p9.ggplot(p9.aes(x='n'), data=df) +\
 ```
 Exercise 4
 ```
+
+# Smith - Watemran Algorithm
+import numpy as np
+
+### PART 1 ###
+# implement function that takes two strings and uses the Smith-Waterman Algorithm
+# to return an optimal local alignment and score
+# insert '-' to indicate gap 
+# take three keyword arguments with default 1 
+# (penalty of one applied to match scores for each missing or changed letter)
+
+    
+def smith_waterman(seq1, seq2, match = 1, gap_penalty = 1, mismatch_penalty = 1):
+    length_m = len(seq1)
+    length_n = len(seq2)
+    compute_val = 0
+    max_score = 0
+    max_score_m = 0
+    max_score_n = 0
+    
+   # init matrix to zero, have an extra row at top and extra col on left
+    matrix = np.zeros((length_m+1, length_n+1), np.int)
+    ### First half of algo: Make the Matrix 
+    for m in range(1, length_m+1):
+        for n in range(1, length_n+1):
+            # if match found
+            if (seq1[m-1] == seq2[n-1]):
+                # upper left + match
+                compute_val = matrix[m-1][n-1] + match
+            # if match not found
+            else:
+                # upper left - mismatch penalty
+                compute_val = matrix[m-1][n-1] - mismatch_penalty
+
+            # find actual value to put into matrix
+            matrix[m][n] = max(compute_val, matrix[m][n-1] - gap_penalty, matrix[m-1][n] - gap_penalty, 0)
+            
+            # check max score
+            if (matrix[m][n] > max_score):
+                max_score = matrix[m][n]
+                # add 1 to max scores to account for the 0 index
+                max_score_m = m
+                max_score_n = n
+   
+    ### Second half of algo: Backtracking from max value 
+    # prioritizing gap (insertion and deletions), and not mismatch
+    
+    # corresponding seq element from max value
+    tb_m = max_score_m
+    tb_n = max_score_n
+    match_seq1 = ""
+    match_seq2 = ""
+    while (matrix[tb_m][tb_n] > 0):
+        if ((seq1[tb_m-1] == seq2[tb_n-1]) and matrix[tb_m-1][tb_n-1] == matrix[tb_m][tb_n] - match):
+            match_seq1 = seq1[tb_m-1] + match_seq1
+            match_seq2 = seq2[tb_n-1] + match_seq2
+            # shift up and to the left
+            tb_m -= 1 
+            tb_n -= 1
+        # If not a match (prioritize gaps, not mismatches)
+        else:
+            # current = l - gap
+            if (matrix[tb_m][tb_n] == matrix[tb_m][tb_n-1] - gap_penalty):
+                match_seq1 = '-' + match_seq1
+                match_seq2 = seq2[tb_n-1] + match_seq2
+                # shift left
+                tb_n-= 1
+            # current = up - gap
+            elif (matrix[tb_m][tb_n] == matrix[tb_m-1][tb_n] - gap_penalty):
+                match_seq1 = seq1[tb_m-1] + match_seq1
+                match_seq2 = '-' + match_seq2
+                # shift up
+                tb_m -= 1
+            else:
+                tb_m -= 1 
+                tb_n -= 1
+    return match_seq1, match_seq2, max_score  
+
+
+### PART 2 ###
+# Test it, and explain how tests show the function works. Test other values.
+
+# Examples from the problem statement:
+sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac')
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', gap_penalty=2)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+
+# Example from the cheatsheet
+sequence1, sequence2, score = smith_waterman('gttacc', 'gttgac')
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+
+# To test whether or not the above smith-waterman function is correct, I will manipulate the parameters.
+
+# Here is the control:
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 5, gap_penalty = 4, mismatch_penalty = 3)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+
+# Now I wil increase the match value. If I increase the match value, I expect score to increase because I'm rewarding more for matching nucleotides.
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 6, gap_penalty = 4, mismatch_penalty = 3)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+# The score increased from 18 to 23.
+
+# Starting from the control again, I will now increase only the gap_penalty value. This should decrease the score.
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 5, gap_penalty = 5, mismatch_penalty = 3)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+# The score decreased from 18 to 17.
+
+# Starting from the control again, I will now increase only the mismatch_penalty value. This should also decrease the score.
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 5, gap_penalty = 4, mismatch_penalty = 4)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+# The score decreased from 18 to 17.
+
 ```
 
