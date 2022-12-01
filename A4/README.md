@@ -27,7 +27,9 @@ I estimate the gradient using the following two equations, which combined makes 
 <img width="514" alt="Screen Shot 2022-11-30 at 6 47 14 PM" src="https://user-images.githubusercontent.com/37753494/204932281-9f4865a3-1ab6-47e2-ad86-464b1682e747.png">
 
 I chose 0.0001 as the stopping criteria because I only needed a sufficiently small number. The steps are set to 0.1 because that is a standard step size and it doesn't have to be too small or else the calculation will take too long. I tested h for different values, with the closest being 1e-10. 
+
 <img width="270" alt="Screen Shot 2022-11-30 at 6 50 02 PM" src="https://user-images.githubusercontent.com/37753494/204932614-fd15d28a-a7ca-49fd-aee4-4d1a1ef8a141.png">
+
 
 
 
