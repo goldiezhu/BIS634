@@ -31,6 +31,21 @@ I chose 0.0001 as the stopping criteria because I only needed a sufficiently sma
 <img width="270" alt="Screen Shot 2022-11-30 at 6 50 02 PM" src="https://user-images.githubusercontent.com/37753494/204932614-fd15d28a-a7ca-49fd-aee4-4d1a1ef8a141.png">
 
 
+To find the local and global minimums, I find the optimized points and then find the error for each of those points. I plotted the points, which resulted in a global minimum of less than 1.01 and local minimums of around 1.11.
+```
+import numpy as np
+
+minimums = []
+for i in np.linspace(0.1,1,5, endpoint = False):
+    for j in np.linspace(0.1,1,5, endpoint = False):
+        min = optimize(i,j, 0.00000000001)
+        minimums.append(min)
+for k in minimums:
+    print(error(k[0], k[1]))
+
+```
+<img width="425" alt="Screen Shot 2022-11-30 at 7 43 56 PM" src="https://user-images.githubusercontent.com/37753494/204938602-7551e18f-fb68-4a59-9b3c-97ff96a60249.png">
+
 
 
 ### Exercise 2
@@ -90,22 +105,6 @@ p9.ggplot(p9.aes(x='n'), data=df) +\
 <img width="472" alt="Screen Shot 2022-11-30 at 5 27 25 PM" src="https://user-images.githubusercontent.com/37753494/204921848-1b2a8bce-eeb8-4221-82ec-7bad015aae74.png">
 
 I chose n = 40 because I needed a large number that will show the difference in time between normal recursion and cache recursion. However, the time for cache is relatively consistent so I could have used a smaller n and the recursive time would still should an exponential slope. The graph is time vs n rather than using the fibonacci number or any other number because the fibonacci number itself does not matter. The results indicate that up until around n = 30, the time for recursion and cache fibonacci are around the same. After a bit before n=30, the recursive fibonacci starts getting exponentially slower.
-
-To find the local and global minimums, I find the optimized points and then find the error for each of those points. I plotted the points, which resulted in a global minimum of less than 1.01 and local minimums of around 1.11.
-```
-import numpy as np
-
-minimums = []
-for i in np.linspace(0.1,1,5, endpoint = False):
-    for j in np.linspace(0.1,1,5, endpoint = False):
-        min = optimize(i,j, 0.00000000001)
-        minimums.append(min)
-for k in minimums:
-    print(error(k[0], k[1]))
-
-```
-<img width="425" alt="Screen Shot 2022-11-30 at 7 43 56 PM" src="https://user-images.githubusercontent.com/37753494/204938602-7551e18f-fb68-4a59-9b3c-97ff96a60249.png">
-
 
 ### Exercise 4
 Smith-Waterman function
