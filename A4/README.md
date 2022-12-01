@@ -245,6 +245,41 @@ score:  56.0
 
 ### Appendix
 
+Exercise 1
+```
+import requests
+
+def error(a = 0.1, b = 0.1):
+    return float(requests.get(f"http://ramcdougal.com/cgi-bin/error_function.py?a={a}&b={b}", headers={"User-Agent": "MyScript"}).text)
+
+def optimize(a, b, h):
+    deriv_a = a - 0.1 * ((error(a + h,b) - error(a,b))/h)
+    deriv_b = b - 0.1 * ((error(a,b + h) - error(a,b))/h)
+    while abs(error(deriv_a, deriv_b) - error(a,b)) > 0.0001:
+        a, b = deriv_a, deriv_b
+        deriv_a = deriv_a - 0.1 * ((error(a + h,b) - error(a,b))/h)
+        deriv_b = deriv_b - 0.1 * ((error(a,b + h) - error(a,b))/h)
+    return deriv_a, deriv_b
+
+optimize(0.2, 0.3, 0.00001)
+optimize(0.2, 0.3, 0.00000000001)
+
+import numpy as np
+
+minimums = []
+for i in np.linspace(0.1,1,5, endpoint = False):
+    for j in np.linspace(0.1,1,5, endpoint = False):
+        min = optimize(i,j, 0.00000000001)
+        minimums.append(min)
+for k in minimums:
+    print(error(k[0], k[1]))
+
+```
+
+Exercise 2
+```
+```
+
 Exercise 3
 ```
 
@@ -300,115 +335,5 @@ p9.ggplot(p9.aes(x='n'), data=df) +\
 ```
 Exercise 4
 ```
-# Smith - Watemran Algorithm
-import numpy as np
-
-### PART 1 ###
-# implement function that takes two strings and uses the Smith-Waterman Algorithm
-# to return an optimal local alignment and score
-# insert '-' to indicate gap 
-# take three keyword arguments with default 1 
-# (penalty of one applied to match scores for each missing or changed letter)
-
-    
-def smith_waterman(seq1, seq2, match = 1, gap_penalty = 1, mismatch_penalty = 1):
-    length_m = len(seq1)
-    length_n = len(seq2)
-    # have an extra row at top and extra col on left
-    matrix = [ [] for i in range(length_m+1)] 
-    compute_val = 0
-    max_score = 0
-    max_score_m = 0
-    max_score_n = 0
-    
-    # init score in grid to zero
-    matrix = np.zeros((length_m, length_n))
-    
-    ### First half of algo: Make the Matrix 
-    for m in range(1, length_m):
-        for n in range(1, length_n):
-            # if match found
-            if (seq1[m] == seq2[n]):
-                # upper left + match
-                compute_val = matrix[m-1][n-1] + match
-            # if match not found
-            else:
-                # upper left - mismatch penalty
-                compute_val = matrix[m-1][n-1] - mismatch_penalty
-                
-            # find actual value to put into matrix
-            matrix[m][n] = max(compute_val, matrix[m][n-1] - gap_penalty, matrix[m-1][n] - gap_penalty, 0)
-            
-            # check max score
-            if (matrix[m][n] > max_score):
-                max_score = matrix[m][n]
-                max_score_m = m
-                max_score_n = n
-   
-    ### Second half of algo: Backtracking from max value 
-    # prioritizing gap (insertion and deletions), and not mismatch
-    
-    # corresponding seq element from max value
-    tb_m = max_score_m
-    tb_n = max_score_n
-    match_seq1 = ""
-    match_seq2 = ""
-    while (matrix[tb_m][tb_n] > 0):
-        if (matrix[tb_m-1][tb_n-1] == matrix[tb_m][tb_n] - match):
-            match_seq1 = seq1[tb_m] + match_seq1
-            match_seq2 = seq2[tb_n] + match_seq2
-            # shift up and to the left
-            tb_m -= 1 
-            tb_n -= 1
-        # If not a match (prioritize gaps, not mismatches)
-        else:
-            # current = l - gap
-            if (matrix[tb_m][tb_n] == matrix[tb_m][tb_n-1] - gap_penalty):
-                match_seq1 = '-' + match_seq1
-                match_seq2 = seq2[tb_n] + match_seq2
-                # shift left
-                tb_n-= 1
-            # current = up - gap
-            elif (matrix[tb_m][tb_n] == matrix[tb_m-1][tb_n] - gap_penalty):
-                match_seq1 = seq1[tb_m] + match_seq1
-                match_seq2 = '-' + match_seq2
-                # shift up
-                tb_m -= 1
-            else:
-                tb_m -= 1 
-                tb_n -= 1
-    return match_seq1, match_seq2, max_score  
-        
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac')
-print(sequence1)
-print(sequence2)
-print("score: ", score)
-
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', gap_penalty=2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
-
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', gap_penalty=8)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
-
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', match = 2, gap_penalty=2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
-
-
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', match = 1, gap_penalty=2, mismatch_penalty = 2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
-
-
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', match = 5, gap_penalty=2, mismatch_penalty = 2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
 ```
 
