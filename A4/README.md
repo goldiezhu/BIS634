@@ -31,7 +31,7 @@ I chose 0.0001 as the stopping criteria because I only needed a sufficiently sma
 <img width="270" alt="Screen Shot 2022-11-30 at 6 50 02 PM" src="https://user-images.githubusercontent.com/37753494/204932614-fd15d28a-a7ca-49fd-aee4-4d1a1ef8a141.png">
 
 
-To find the local and global minimums, I find the optimized points and then find the error for each of those points. I plotted the points, which resulted in a global minimum of less than 1.01 and local minimums of around 1.11.
+To find the local and global minimums, I find the optimized points and then find the error for each of those points. I plotted the points, which resulted in a global minimum of less than 1.01 and local minimums of around 1.11. If I didn't know how many minimas there are, I could run a large n number of tests for clusters, such as the one around 1.02.
 ```
 import numpy as np
 
@@ -47,8 +47,9 @@ for k in minimums:
 <img width="425" alt="Screen Shot 2022-11-30 at 7 43 56 PM" src="https://user-images.githubusercontent.com/37753494/204938602-7551e18f-fb68-4a59-9b3c-97ff96a60249.png">
 
 
-
 ### Exercise 2
+
+
 ### Exercise 3 - Fibonacci
 
 ```
