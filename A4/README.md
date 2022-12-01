@@ -21,6 +21,7 @@ def optimize(a, b, h):
 optimize(0.2, 0.3, 0.00001)
 ```
 I estimate the gradient using the following two equations, which combined makes the third equation. The equation uses small values of h to get closer to the desired approximation of the derivative.
+
 <img width="242" alt="Screen Shot 2022-11-30 at 6 39 51 PM" src="https://user-images.githubusercontent.com/37753494/204931469-362d58dd-0e52-4216-ae72-71320ba2f774.png">
 <img width="242" alt="Screen Shot 2022-11-30 at 6 39 56 PM" src="https://user-images.githubusercontent.com/37753494/204931470-b44fc796-ea33-40a4-8da8-17211de07bfb.png">
 
@@ -227,6 +228,7 @@ I chose n = 40 because I needed a large number that will show the difference in 
 ### Exercise 4
 Smith-Waterman function
 ```
+
 # Smith - Watemran Algorithm
 import numpy as np
 
@@ -241,34 +243,32 @@ import numpy as np
 def smith_waterman(seq1, seq2, match = 1, gap_penalty = 1, mismatch_penalty = 1):
     length_m = len(seq1)
     length_n = len(seq2)
-    # have an extra row at top and extra col on left
-    matrix = [ [] for i in range(length_m+1)] 
     compute_val = 0
     max_score = 0
     max_score_m = 0
     max_score_n = 0
     
-    # init score in grid to zero
-    matrix = np.zeros((length_m, length_n))
-    
+   # init matrix to zero, have an extra row at top and extra col on left
+    matrix = np.zeros((length_m+1, length_n+1), np.int)
     ### First half of algo: Make the Matrix 
-    for m in range(1, length_m):
-        for n in range(1, length_n):
+    for m in range(1, length_m+1):
+        for n in range(1, length_n+1):
             # if match found
-            if (seq1[m] == seq2[n]):
+            if (seq1[m-1] == seq2[n-1]):
                 # upper left + match
                 compute_val = matrix[m-1][n-1] + match
             # if match not found
             else:
                 # upper left - mismatch penalty
                 compute_val = matrix[m-1][n-1] - mismatch_penalty
-                
+
             # find actual value to put into matrix
             matrix[m][n] = max(compute_val, matrix[m][n-1] - gap_penalty, matrix[m-1][n] - gap_penalty, 0)
             
             # check max score
             if (matrix[m][n] > max_score):
                 max_score = matrix[m][n]
+                # add 1 to max scores to account for the 0 index
                 max_score_m = m
                 max_score_n = n
    
@@ -281,9 +281,9 @@ def smith_waterman(seq1, seq2, match = 1, gap_penalty = 1, mismatch_penalty = 1)
     match_seq1 = ""
     match_seq2 = ""
     while (matrix[tb_m][tb_n] > 0):
-        if (matrix[tb_m-1][tb_n-1] == matrix[tb_m][tb_n] - match):
-            match_seq1 = seq1[tb_m] + match_seq1
-            match_seq2 = seq2[tb_n] + match_seq2
+        if ((seq1[tb_m-1] == seq2[tb_n-1]) and matrix[tb_m-1][tb_n-1] == matrix[tb_m][tb_n] - match):
+            match_seq1 = seq1[tb_m-1] + match_seq1
+            match_seq2 = seq2[tb_n-1] + match_seq2
             # shift up and to the left
             tb_m -= 1 
             tb_n -= 1
@@ -292,12 +292,12 @@ def smith_waterman(seq1, seq2, match = 1, gap_penalty = 1, mismatch_penalty = 1)
             # current = l - gap
             if (matrix[tb_m][tb_n] == matrix[tb_m][tb_n-1] - gap_penalty):
                 match_seq1 = '-' + match_seq1
-                match_seq2 = seq2[tb_n] + match_seq2
+                match_seq2 = seq2[tb_n-1] + match_seq2
                 # shift left
                 tb_n-= 1
             # current = up - gap
             elif (matrix[tb_m][tb_n] == matrix[tb_m-1][tb_n] - gap_penalty):
-                match_seq1 = seq1[tb_m] + match_seq1
+                match_seq1 = seq1[tb_m-1] + match_seq1
                 match_seq2 = '-' + match_seq2
                 # shift up
                 tb_m -= 1
@@ -305,59 +305,52 @@ def smith_waterman(seq1, seq2, match = 1, gap_penalty = 1, mismatch_penalty = 1)
                 tb_m -= 1 
                 tb_n -= 1
     return match_seq1, match_seq2, max_score  
-        
+
+
+### PART 2 ###
+# Test it, and explain how tests show the function works. Test other values.
+
+# Examples from the problem statement:
 sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac')
-print(sequence1)
-print(sequence2)
-print("score: ", score)
-
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
 sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', gap_penalty=2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
 
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', gap_penalty=8)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
+# Example from the cheatsheet
+sequence1, sequence2, score = smith_waterman('gttacc', 'gttgac')
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
 
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', match = 2, gap_penalty=2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
+# To test whether or not the above smith-waterman function is correct, I will manipulate the parameters.
 
+# Here is the control:
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 5, gap_penalty = 4, mismatch_penalty = 3)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
 
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', match = 1, gap_penalty=2, mismatch_penalty = 2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
+# Now I wil increase the match value. If I increase the match value, I expect score to increase because I'm rewarding more for matching nucleotides.
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 6, gap_penalty = 4, mismatch_penalty = 3)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+# The score increased from 18 to 23.
 
+# Starting from the control again, I will now increase only the gap_penalty value. This should decrease the score.
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 5, gap_penalty = 5, mismatch_penalty = 3)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+# The score decreased from 18 to 17.
 
-sequence1, sequence2, score = smith_waterman('tgcatcgagaccctacgtgac', 'actagacctagcatcgac', match = 5, gap_penalty=2, mismatch_penalty = 2)
-print(sequence1)
-print(sequence2)
-print("score: ", score)
+# Starting from the control again, I will now increase only the mismatch_penalty value. This should also decrease the score.
+sequence1, sequence2, score = smith_waterman('gacttac', 'cgtgaattcat', match = 5, gap_penalty = 4, mismatch_penalty = 4)
+print('Sequence 1: {}, Sequence 2: {}, Score: {}'.format(sequence1, sequence2, score))
+# The score decreased from 18 to 17.
+
 ```
 Solutions:
 ```
-accct-ac-tgac
-gacctagctcgac
-score:  8.0
-gcatcga
-gcatcga
-score:  7.0
-gcatcga
-gcatcga
-score:  7.0
-cagaccct-ac-tgac
-ca-gacctagctcgac
-score:  18.0
-gcatcga
-gcatcga
-score:  7.0
-catcgagaccct-ac-tgac
-c--t--agacctagctcgac
-score:  56.0
+Sequence 1: agacccta-ct-gac, Sequence 2: aga-cctagctcgac, Score: 8
+Sequence 1: gcatcga, Sequence 2: gcatcga, Score: 7
+Sequence 1: gtt-ac, Sequence 2: gttgac, Score: 4
+Sequence 1: gatt-a, Sequence 2: gattca, Score: 18
+Sequence 1: gatt-a, Sequence 2: gattca, Score: 23
+Sequence 1: gatt, Sequence 2: gatt, Score: 17
+Sequence 1: gatt-a, Sequence 2: gattca, Score: 17
 ```
 
 ### Appendix
