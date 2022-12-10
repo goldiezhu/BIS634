@@ -50,9 +50,10 @@ plt.scatter(osmancik[0], osmancik[1], label='Osmancik')
 plt.title('PC0 vs. PC1 for Osmancik and Cammeo Rice')
 plt.xlabel('PC0')
 plt.ylabel('PC1')
+plt.legend()
 plt.show()
 ```
-<img width="287" alt="Screen Shot 2022-12-09 at 11 02 39 PM" src="https://user-images.githubusercontent.com/37753494/206828074-45c42791-6a0d-40ed-a621-ca0408cd0122.png">
+<img width="287" alt="Screen Shot 2022-12-09 at 11 24 19 PM" src="https://user-images.githubusercontent.com/37753494/206828831-9cbd24c4-ee62-4ec2-9369-77bb30e072e5.png">
 
 Because the two clusters are basically visibly separated, KNN should be able to effectively separate and accurately predict the different types of rice. There might be some issues in the slight overlap area but that area is small compared to the cluster size.
 
