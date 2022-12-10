@@ -127,6 +127,9 @@ def contains(x, y, w, h, node_list):
        if point.x >= x and point.x <= x+w and point.y>=y and point.y<=y+h:
            pts.append(point)
    return pts
+   
+def euclidean_distance(self, x1, y1, x2, y2):
+    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
 #(x, y; c)
 ```
